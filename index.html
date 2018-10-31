@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Pokemon!</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+  <div id="pokemons">[array of pokemon go here]</div>
+  <div id="selectedPokemon">Pokemon selected</div>
+  <div id="otherPokemons">[other pokemon]</div>
+  <div id="enemyPokemon">fight enemy pokemon here</div>
+  <button id="attackBtn">Attack</button>
+  <button id="restartBtn">Restart</button>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      //Declare variables
+      var isRunning = false;
+      var pokemons = [
+        {
+          name: "Pikachu",
+          hp: 20,
+          atkPower: 2,
+          counterPower: 3,
+        },
+        {
+          name: "Bulbasaur",
+          hp: 20,
+          atkPower: 2,
+          counterPower: 3,
+        },
+        {
+          name: "Charmander",
+          hp: 15,
+          atkPower: 1,
+          counterPower: 2,
+        },
+        {
+          name: "Squirtle",
+          hp: 30,
+          atkPower: 4,
+          counterPower: 5,
+        }
+      ];
+      var selectedPokemon = [];
+      var otherPokemons = [];
+      var enemyPokemon = [];
+
+      //Testing
+      console.log(pokemons);
+
+    });
+  </script>
+</body>
+</html>
