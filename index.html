@@ -14,6 +14,7 @@
   <div id="pokemons"></div>
   <div id="selectedPokemon">Pokemon selected</div>
   <div id="otherPokemons">[other pokemon]</div>
+  <div>enemy pokemon</div>
   <div id="enemyPokemon">fight enemy pokemon here</div>
   <button id="attackBtn">Attack</button>
   <button id="restartBtn">Restart</button>
@@ -58,12 +59,80 @@
 
       // Declared variables
       var choosePokemon = [];
-      var choosenPokemon = {};
+      var chosenPokemon = {};
       var enemyPokemon = {};
       var pokemonSelected = false;
       var enemySelected = false;
 
-      console.log("new");
+      // Start a new game
+      function newGame() {
+        choosePokemon = pokemons;
+        generatePokemon(choosePokemon);
+      };
+
+
+      // Generate pokemon images
+      function generatePokemon(pokemonList) {
+        for (var i=0; i < pokemonList.length; i++) {
+          var pokeCard = $("<div>").addClass("pokemon");
+          pokeCard.attr({
+            "id": pokemonList[i].name,
+            "key": i
+          });
+          var sprite = $("<img>");
+          sprite.attr("src", pokemonList[i].imgSrc);
+          pokeCard.append(sprite);
+          $("#pokemons").append(pokeCard);
+        }
+      }
+      newGame();
+
+
+      // Choose pokemon
+      $(document).on("click", ".pokemon", function() {
+        var pokemonId = $(this).attr("key");
+        // User picks pokemon
+        if (!pokemonSelected && !enemySelected) {
+          // Sets chosen pokemon
+          chosenPokemon = choosePokemon[pokemonId];
+          console.log(choosePokemon);
+          pokemonSelected = true;
+          // Move chosen pokemon to selected and pushes other pokemon to new div
+          $("#" + chosenPokemon.name).appendTo("#selectedPokemon");
+          $("#pokemons").contents().appendTo("#otherPokemons");
+        } else if (pokemonSelected && !enemySelected) {
+          // Sets enemy pokemon and moves to enemy div
+          enemyPokemon = choosePokemon[pokemonId];
+          $("#" + enemyPokemon.name).appendTo("#enemyPokemon");
+          enemySelected = true;
+        }
+      })
+
+
+      // Attack pokemon
+      $("#attackBtn").on("click", function() {
+        if (pokemonSelected && enemySelected) {
+          // When user attacks, decrease enemyPokemon hp and increase atk power
+          enemyPokemon.hp -= chosenPokemon.atkPower
+          chosenPokemon.hp -= enemyPokemon.atkPower;
+          chosenPokemon.atkPower += chosenPokemon.defAtkPower;
+          console.log(chosenPokemon.hp);
+          console.log(enemyPokemon.hp);
+          checkHp();
+        }
+      });
+
+      function checkHp() {
+        if (chosenPokemon.hp == 0) {
+          alert("you lose!")
+        } else if (enemyPokemon.hp == 0) {
+          $("#enemyPokemon").empty();
+          // Allows user to select new enemy and resets enemy
+          enemyPokemon = {};
+          enemySelected = false;
+        }
+      };
+
     });
   </script>
 </body>
