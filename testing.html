@@ -10,141 +10,175 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-  <p>Choose a pokemon!</p>
-  <div id="pokemons"></div>
-  <div id="selectedPokemon">Pokemon selected</div>
-  <div id="otherPokemons">[other pokemon]</div>
-  <div id="enemyPokemon">fight enemy pokemon here</div>
-  <button id="attackBtn">Attack</button>
-  <button id="restartBtn">Restart</button>
+  <div class="flex">
+    <div class="container">
+      <h1>Choose a starter pokemon!</h1>
+      <div class="flex" id="pokemons"></div>
+      <div id="selectedPokemon">Pokemon selected</div>
+      <div class="flex" id="otherPokemons">[other pokemon]</div>
+      <div>enemy pokemon</div>
+      <div id="enemyPokemon">fight enemy pokemon here</div>
+      <button id="attackBtn">Attack</button>
+      <button id="restartBtn">Restart</button>
+    </div>
+  </div>
 
   <script type="text/javascript">
     $(document).ready(function() {
       var pokemons = [
         {
           name: "Pikachu",
-          hp: 22,
+          hp: 100,
           atkPower: 2,
           defAtkPower: 2,
-          counterPower: 2,
+          counterPower: 20,
           imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png'
         },
         {
           name: "Bulbasaur",
-          hp: 25,
-          atkPower: 2,
-          defAtkPower: 2,
-          counterPower: 2,
+          hp: 110,
+          atkPower: 6,
+          defAtkPower: 6,
+          counterPower: 5,
           imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png'
         },
         {
           name: "Charmander",
-          hp: 28,
-          atkPower: 1,
-          defAtkPower: 1,
-          counterPower: 2,
+          hp: 120,
+          atkPower: 5,
+          defAtkPower: 5,
+          counterPower: 15,
           imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png'
         },
         {
           name: "Squirtle",
-          hp: 30,
+          hp: 130,
           atkPower: 4,
-          defAtkPower: 1,
-          counterPower: 2,
+          defAtkPower: 4,
+          counterPower: 10,
           imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png'
         }
       ];
 
+
       // Declared variables
       var choosePokemon = [];
-      var choosenPokemon = {
-        // name: "Squirtle",
-        // hp: 30,
-        // atkPower: 4,
-        // defAtkPower: 4,
-        // counterPower: 2,
-        // imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png'
-      };
-      var enemyPokemon = {
-        name: "Charmander",
-        hp: 28,
-        atkPower: 1,
-        defAtkPower: 1,
-        counterPower: 2,
-        imgSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png'
-      };
+      var chosenPokemon = {};
+      var enemyPokemon = {};
       var pokemonSelected = false;
       var enemySelected = false;
-      var selectEnemy = false;
-
-      // On click events
-      $("#attackBtn").on("click", function() {
-        attack();
-      });
-
-      // On attack
-      function attack() {
-        console.log(choosenPokemon);
-          // hp calculation
-          choosenPokemon.hp = choosenPokemon.hp - enemyPokemon.atkPower;
-          enemyPokemon.hp = enemyPokemon.hp - choosenPokemon.atkPower;
-          // dmg calculation
-          choosenPokemon.atkPower = choosenPokemon.atkPower + choosenPokemon.defAtkPower;
-          // console.log(choosenPokemon.atkPower + choosenPokemon.defAtkPower);
-
-          // if enemy hp reaches 0, remove from enemyPokemon
-          if (enemyPokemon.hp <= 0) {
-            alert("you killed enemy!");
-            enemySelected = false;
-          // if your hp reaches 0, you lose
-          } else if (choosenPokemon.hp <= 0) {
-            alert("you died!");
-          }
-          // testing
-          console.log("choosen hp" + choosenPokemon.hp);
-          console.log("enemy hp" + enemyPokemon.hp)
-      }
 
       // Start a new game
       function newGame() {
-        choosePokemon = pokemons;
-        console.log(choosePokemon)
-        generatePokemon(choosePokemon);
-      }
 
-      // Generate pokemon from array
-      function generatePokemon(pokemonList) {
-        for (var i=0; i < pokemonList.length; i++) {
-          var pokeName = $("<div>" + "<img src=" + pokemonList[i].imgSrc + ">" + "</div>");
-          pokeName.addClass("pokemon");
-          pokeName.attr({
-            "id": pokemonList[i].name,
-            "key": i,
-            "atk": pokemonList[i].atkPower
-          });
-          $("#pokemons").append(pokeName);
-        }
+        choosePokemon = [...pokemons];
+        generatePokemon(pokemons);
+        console.log(pokemons);
+        console.log(choosePokemon);
       };
 
+      function resetGame() {
+        $("#pokemons").empty();
+        $("#selectedPokemon").empty();
+        $("#enemyPokemon").empty();
+        $("#otherPokemons").empty();
+        choosePokemon = [...pokemons];
+        generatePokemon(pokemons);
+        chosenPokemon = {};
+        enemyPokemon = {};
+        pokemonSelected = false;
+        enemySelected = false;
+        console.log(pokemons);
+        console.log(choosePokemon);
+      };
+
+
+      // Generate pokemon images
+      function generatePokemon(pokemonList) {
+        for (var i=0; i < pokemonList.length; i++) {
+          var pokeCard = $("<div>").addClass("pokemon");
+          pokeCard.attr({
+            "id": pokemonList[i].name,
+            "key": i
+          });
+          var sprite = $("<img>");
+          sprite.attr("src", pokemonList[i].imgSrc);
+          pokeCard.append(sprite);
+          $("#pokemons").append(pokeCard);
+        }
+      }
       newGame();
 
-      // on click pokemon
-      $(".pokemon").on("click", function() {
+
+      // Choose pokemon
+      $(document).on("click", ".pokemon", function() {
         var pokemonId = $(this).attr("key");
-        // User selects pokemon
+        // User picks pokemon
         if (!pokemonSelected && !enemySelected) {
-          choosenPokemon = choosePokemon[pokemonId];
-          $("#" + choosenPokemon.name).appendTo("#selectedPokemon");
-          $("#pokemons").contents().appendTo("#otherPokemons");
-          // $("#otherPokemons").contents().appendTo("#choosePokemons");
+          // Sets chosen pokemon
+          chosenPokemon = choosePokemon[pokemonId];
+          console.log(choosePokemon);
           pokemonSelected = true;
-        } else if (pokemonSelected && !selectEnemy) {
+          // Testing
+          var pokemonCard = ($("<div>")).addClass("playerPokemon");
+          var pokeImg = $("<img>");
+          var pokeHp = $("<p>" + chosenPokemon.hp + "</p>")
+          pokeHp.attr("id", "pokeHp");
+          pokeImg.attr("src", chosenPokemon.imgSrc);
+          pokemonCard.append(pokeImg).append(pokeHp);
+          pokemonCard.appendTo("#selectedPokemon");
+          $("#pokemons").contents().appendTo("#otherPokemons");
+
+          // Remove Pokemon from array
+          $("#" + chosenPokemon.name).remove();
+
+        } else if (pokemonSelected && !enemySelected) {
+          // Sets enemy pokemon and moves to enemy div
           enemyPokemon = choosePokemon[pokemonId];
-          $("#" + enemyPokemon.name).appendTo("#enemyPokemon");
-          enenmySelected = true;
+          // $("#" + enemyPokemon.name).appendTo("#enemyPokemon");
+          enemySelected = true;
+          var enemyCard = ($("<div>")).addClass("enemyPokemon");
+          var enemyImg = $("<img>");
+          var enemyHp = $("<p>" + enemyPokemon.hp + "</p>")
+          enemyHp.attr("id", "enemyHp");
+          enemyImg.attr("src", enemyPokemon.imgSrc);
+          enemyCard.append(enemyImg).append(enemyHp);
+          enemyCard.appendTo("#enemyPokemon");
+          $("#" + enemyPokemon.name).remove();
+        }
+      })
+
+
+      // Attack pokemon
+      $("#attackBtn").on("click", function() {
+        if (pokemonSelected && enemySelected) {
+          // When user attacks, decrease enemyPokemon hp and increase atk power
+          enemyPokemon.hp -= chosenPokemon.atkPower
+          chosenPokemon.hp -= enemyPokemon.atkPower;
+          chosenPokemon.atkPower += chosenPokemon.defAtkPower;
+          // Update hp of pokemon
+          $("#pokeHp").text(chosenPokemon.hp);
+          $("#enemyHp").text(enemyPokemon.hp);
+          checkHp();
+          console.log(pokemons);
+          console.log(choosePokemon);
         }
       });
 
+      function checkHp() {
+        if (chosenPokemon.hp <= 0) {
+          alert("you lose!")
+        } else if (enemyPokemon.hp <= 0) {
+          $("#enemyPokemon").empty();
+          // Allows user to select new enemy and resets enemy
+          enemyPokemon = {};
+          enemySelected = false;
+        }
+      };
+
+      $("#restartBtn").on("click", function() {
+        resetGame();
+      })
 
     });
   </script>
