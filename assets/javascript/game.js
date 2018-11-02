@@ -127,7 +127,7 @@ $(document).ready(function() {
 
   function checkHp() {
     if (chosenPokemon.hp <= 0) {
-      alert("you lose!")
+      alert("Your pokemon has fainted! Refresh page to try again")
     } else if (enemyPokemon.hp <= 0) {
       $("#enemyPokemon").empty();
       // Allows user to select new enemy and resets enemy
@@ -135,5 +135,4 @@ $(document).ready(function() {
       enemySelected = false;
     }
   };
-
 });
