@@ -97,14 +97,30 @@
           chosenPokemon = choosePokemon[pokemonId];
           console.log(choosePokemon);
           pokemonSelected = true;
+          // Testing
+          var pokemonCard = ($("<div>")).addClass("playerPokemon");
+          var pokeImg = $("<img>");
+          var pokeHp = $("<p>" + chosenPokemon.hp + "</p>")
+          pokeHp.attr("id", "pokeHp");
+          pokeImg.attr("src", chosenPokemon.imgSrc);
+          pokemonCard.append(pokeImg).append(pokeHp);
+          pokemonCard.appendTo("#selectedPokemon");
+
           // Move chosen pokemon to selected and pushes other pokemon to new div
-          $("#" + chosenPokemon.name).appendTo("#selectedPokemon");
-          $("#pokemons").contents().appendTo("#otherPokemons");
+          // $("#" + chosenPokemon.name).appendTo("#selectedPokemon");
+          // $("#pokemons").contents().appendTo("#otherPokemons");
         } else if (pokemonSelected && !enemySelected) {
           // Sets enemy pokemon and moves to enemy div
           enemyPokemon = choosePokemon[pokemonId];
-          $("#" + enemyPokemon.name).appendTo("#enemyPokemon");
+          // $("#" + enemyPokemon.name).appendTo("#enemyPokemon");
           enemySelected = true;
+          var enemyCard = ($("<div>")).addClass("enemyPokemon");
+          var enemyImg = $("<img>");
+          var enemyHp = $("<p>" + enemyPokemon.hp + "</p>")
+          enemyHp.attr("id", "enemyHp");
+          enemyImg.attr("src", enemyPokemon.imgSrc);
+          enemyCard.append(enemyImg).append(enemyHp);
+          enemyCard.appendTo("#enemyPokemon");
         }
       })
 
@@ -116,16 +132,17 @@
           enemyPokemon.hp -= chosenPokemon.atkPower
           chosenPokemon.hp -= enemyPokemon.atkPower;
           chosenPokemon.atkPower += chosenPokemon.defAtkPower;
-          console.log(chosenPokemon.hp);
-          console.log(enemyPokemon.hp);
+          // Update hp of pokemon
+          $("#pokeHp").text(chosenPokemon.hp);
+          $("#enemyHp").text(enemyPokemon.hp);
           checkHp();
         }
       });
 
       function checkHp() {
-        if (chosenPokemon.hp == 0) {
+        if (chosenPokemon.hp <= 0) {
           alert("you lose!")
-        } else if (enemyPokemon.hp == 0) {
+        } else if (enemyPokemon.hp <= 0) {
           $("#enemyPokemon").empty();
           // Allows user to select new enemy and resets enemy
           enemyPokemon = {};
